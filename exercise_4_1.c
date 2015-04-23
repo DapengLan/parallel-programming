@@ -25,28 +25,16 @@ if (argc != 2) {
 
   double total_mpi_bcast_time = 0.0;
 
- if (world_rank == 0) {
- // If we are the root process, send our data to everyone
-    int i;
-    for (i = 0; i < world_size; i++) {
-      if (i != world_rank) {
-
         MPI_Barrier(MPI_COMM_WORLD);
         total_mpi_bcast_time -= MPI_Wtime();
         MPI_Bcast(&token, strlen(token), MPI_BYTE, 0, MPI_COMM_WORLD);
         MPI_Barrier(MPI_COMM_WORLD);
         total_mpi_bcast_time += MPI_Wtime();
-            }
-
-      }
-  }  else {
-        // If we are a receiver process, receive the data from the root
-     MPI_Bcast(&token, strlen(token), MPI_BYTE, 0, MPI_COMM_WORLD);
-    printf("Process %d received token %s from process %d, time is %f\n", 
+        printf("Process %d received token %s , using time: %f\n", 
 world_rank, token,
-           world_rank - 1, total_mpi_bcast_time);
+          total_mpi_bcast_time);
 
-  }
+
 MPI_Finalize();
 }
 
